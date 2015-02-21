@@ -27,8 +27,25 @@ Add new repos
 
 Update
 	sudo apt-get update
+	sudo apt-get upgrade
+	kernel stuff*
 	sudo apt-get dist-upgrade
 
+*apt-get install linux-image-2.6-flavor
+find flavor with uname -r
+
+4.6.1. Installing the kernel metapackage
+
+When you dist-upgrade from lenny to squeeze, it is strongly recommended that you install a new linux-image-2.6-* metapackage. This package may be installed automatically by the dist-upgrade process. You can verify this by running:
+
+# dpkg -l "linux-image*" | grep ^ii
+If you do not see any output, then you will need to install a new linux-image package by hand. To see a list of available linux-image-2.6 metapackages, run:
+
+# apt-cache search linux-image-2.6- | grep -v transition
+If you are unsure about which package to select, run uname -r and look for a package with a similar name. For example, if you see '2.6.26-2-686', it is recommended that you install linux-image-2.6-686. You may also use apt-cache to see a long description of each package in order to help choose the best one available. For example:
+
+# apt-cache show linux-image-2.6-686
+You should then use apt-get install to install it. Once this new kernel is installed you should reboot at the next available opportunity to get the benefits provided by the new kernel version.
 
 
 SERVICES

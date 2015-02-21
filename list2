@@ -11,7 +11,7 @@ nano /etc/apt/sources.list
 deb http://archive.debian.org/debian-archive/debian/ lenny main contrib non-free
 deb http://archive.debian.org/debian-security/ lenny/updates main contrib non-free
 sudo aptitude update
-sudo aptitude upgrade
+sudo aptitude dist-upgrade
 
 
 add repo: 
@@ -19,6 +19,29 @@ deb http://mirrors.kernel.org/debian squeeze main contrib
 
 apt-get update
 apt-get upgrade //takes a while. 
+
+add repos:
+		deb http://http.debian.net/debian wheezy main
+		deb-src http://http.debian.net/debian wheezy main
+
+		deb http://http.debian.net/debian wheezy-updates main
+		deb-src http://http.debian.net/debian wheezy-updates main
+		deb-src http://http.debian.net/debian wheezy-backports main
+		
+		deb http://security.debian.org/ wheezy/updates main
+		deb-src http://security.debian.org/ wheezy/updates main
+
+
+
+
+
+
+
+
+
+
+
+
 
 Proto Recv-Q Send-Q Local Address           Foreign Address
 State       PID/Program name
@@ -143,8 +166,12 @@ saslauthd samba gdm exim4 dovecot
 http://cnedelcu.blogspot.com/2014/01/how-to-set-up-simple-mail-server-debian-linux.html
 
 https://www.debian.org/releases/squeeze/i386/release-notes/ch-upgrading.html
-Start from 4.4.5 
-apt-get install linux-image-2.6-flavor
+
+
+Start from 4.4.5 --- install kernel first
+okay, first first thing:
+do sudo apt-get update and upgrade of lenny, then add kernel, then dist-upgrade.
+
 
 
 
