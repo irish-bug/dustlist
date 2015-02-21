@@ -1,0 +1,90 @@
+Debian checklist
+System Info
+OS: Debian Lenny 5.0.4
+Kernel: Linux mail 2.6.26-2-686 #1 SMP Wed May 12 21:56:10 UTC 2010 i686 GNU/Linux
+Default user: administrator
+Default pw: changeme
+
+change admin and root passwords
+
+$ cat /etc/passwd to see who else has an account. 
+ 
+userdel userName
+Add user(administrator) to sudo:
+$ su
+$ adduser administrator sudo
+nano /etc/sudoers [ctrl k to copy and paste root line and change root to administrator]
+$ exit
+
+Update repos:
+Open /etc/apt/sources.list
+Remove or comment out old repos
+Add new repos
+	deb http://archive.debian.org/debian-archive/debian/ lenny main contrib non-free
+	deb-src http://archive.debian.org/debian-archive/debian/ lenny main contrib non-free
+	deb http://archive.debian.org/debian-security/ lenny/updates main contrib non-free
+	deb-src http://archive.debian.org/debian-security/ lenny/updates main contrib non-free
+
+Update
+	sudo apt-get update
+	sudo apt-get dist-upgrade
+
+
+
+SERVICES
+http://www.tldp.org/HOWTO/Security-Quickstart-HOWTO/services.html
+
+iptables (25 for smtp; 53, 80, 443 for internet):
+Set up iptables (TODO: need more rules for hardening):
+iptables -F
+iptables -X
+iptables -A INPUT -p tcp -m tcp --sport 25 -j ACCEPT 
+iptables -A INPUT -p tcp -m tcp --sport 53 -j ACCEPT 
+iptables -A INPUT -p udp -m udp --sport 53 -j ACCEPT 
+iptables -A INPUT -p tcp -m tcp --sport 80 -j ACCEPT 
+iptables -A INPUT -p tcp -m tcp --sport 443 -j ACCEPT 
+iptables -A INPUT -j DROP 
+iptables -A OUTPUT -p tcp -m tcp --dport 25 -j ACCEPT 
+iptables -A OUTPUT -p tcp -m tcp --dport 80 -j ACCEPT 
+iptables -A OUTPUT -p tcp -m tcp --dport 443 -j ACCEPT 
+iptables -A OUTPUT -p tcp -m tcp --dport 53 -j ACCEPT 
+iptables -A OUTPUT -p udp -m udp --dport 53 -j ACCEPT 
+iptables -A OUTPUT -j DROP
+save it
+$ iptables-save > /etc/firewall.conf
+To apply the rules at boot, create a script file (/etc/network/if-up.d/iptables) with following:
+#!/bin/sh
+iptables-restore < /etc/firewall.conf
+make it executable
+$ chmod +x /etc/network/if-up.d/iptables
+To restore:
+$ iptables-restore < /etc/firewall.conf
+
+
+To fix pubkey errors
+apt-get install debian-keyring debian-archive-keyring
+
+Stop and remove unnecessary services (TODO) - default lists available at Logs folder
+To see the currently running services:
+$ netstat -npl
+To see the installed packages:
+$ dpkg-query -l
+To see the status of installed packages:
+$ dpkg --get-selections
+To stop running services:
+$ service [name] stop
+or
+$ /etc/init.d/[name] stop
+To remove
+	$ apt-get remove [name]
+
+Apply updates
+apt-get update
+apt-get upgrade
+
+running:
+
+saslauthd samba gdm exim4 dovecot
+
+apt-get install firestarter curl
+
